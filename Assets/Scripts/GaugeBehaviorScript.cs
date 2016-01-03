@@ -16,8 +16,8 @@ public class GaugeBehaviorScript : MonoBehaviour {
     public GameObject gaugeMarker;
     public GameObject numberMarker;
     public GameObject stopButton;
+    public GameObject continueButton;
     public GameObject restartButton;
-    public GameObject newGameButton;
     public Text messageText;
     public Text pointsText;
     public Text lifeText;
@@ -67,7 +67,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
         }
         else if (currentState == States.GAME_OVER)
         {
-            newGameButton.SetActive(true);
+            restartButton.SetActive(true);
             messageText.text = "Game Over";
         }
 	}
@@ -117,7 +117,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
     //Restart the game (means going on)
     public void Restart()
     {
-        restartButton.SetActive(false);
+        continueButton.SetActive(false);
 
         randomNumber = Random.Range(10, 98);
         messageText.text = "Stop at " + randomNumber + "%";
@@ -146,7 +146,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
 
         if (life > 0)
         {
-            restartButton.SetActive(true);
+            continueButton.SetActive(true);
         }
         else
         {
@@ -160,7 +160,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
 
     public void SetupNewGame()
     {
-        newGameButton.SetActive(false);
+        restartButton.SetActive(false);
 
         points = 0;
         life = 30;
