@@ -254,7 +254,6 @@ public class GaugeBehaviorScript : MonoBehaviour {
     IEnumerator DelayToHome()
     {
         canvasAnimator.SetBool("FadeInGame", false);
-        yield return new WaitForSeconds(0.5f);
         canvasAnimator.SetBool("KeepHUD", false);
         yield return new WaitForSeconds(0.5f);
         canvasAnimator.SetBool("FadeInHome", true);
