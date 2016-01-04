@@ -251,15 +251,26 @@ public class GaugeBehaviorScript : MonoBehaviour {
         currentState = States.BEFORE_GAME;
     }
 
-    public void GoToHome()
+    IEnumerator DelayToHome()
     {
         canvasAnimator.SetBool("FadeInGame", false);
+        yield return new WaitForSeconds(0.5f);
         canvasAnimator.SetBool("KeepHUD", false);
+        yield return new WaitForSeconds(0.5f);
         canvasAnimator.SetBool("FadeInHome", true);
+    }
+
+    public void GoToHome()
+    {
+        //canvasAnimator.SetBool("FadeInGame", false);
+        //canvasAnimator.SetBool("KeepHUD", false);
+        //canvasAnimator.SetBool("FadeInHome", true);
 
         GetBestScore();
 
         currentState = States.HOME_SCREEN;
+
+        StartCoroutine(DelayToHome());
     }
 
     private void Save()
