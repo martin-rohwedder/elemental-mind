@@ -13,6 +13,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
     };
 
     public float duration = 3.0f;
+    public GameObject canvas;
     public GameObject homePanel;
     public GameObject gamePanel;
     public GameObject gauge;
@@ -37,9 +38,13 @@ public class GaugeBehaviorScript : MonoBehaviour {
     private States currentState = States.HOME_SCREEN;
     private int points = 0;
     private int life = 30;
+    private Animator canvasAnimator;
 
     // Use this for initialization
     void Start () {
+        canvasAnimator = canvas.GetComponent<Animator>();
+        canvasAnimator.SetBool("FadeInHome", true);
+
         gamePanel.SetActive(false);
         homePanel.SetActive(true);
 
@@ -199,8 +204,11 @@ public class GaugeBehaviorScript : MonoBehaviour {
     {
         SetupNewGame();
 
-        homePanel.SetActive(false);
-        gamePanel.SetActive(true);
+        canvasAnimator.SetBool("FadeInHome", false);
+        canvasAnimator.SetBool("FadeInGame", true);
+
+        //homePanel.SetActive(false);
+        //gamePanel.SetActive(true);
 
         currentState = States.BEFORE_GAME;
     }
@@ -209,8 +217,11 @@ public class GaugeBehaviorScript : MonoBehaviour {
     {
         SetupNewGame();
 
-        gamePanel.SetActive(false);
-        homePanel.SetActive(true);
+        canvasAnimator.SetBool("FadeInGame", false);
+        canvasAnimator.SetBool("FadeInHome", true);
+
+        //gamePanel.SetActive(false);
+        //homePanel.SetActive(true);
 
         GetBestScore();
 
