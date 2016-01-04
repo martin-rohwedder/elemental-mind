@@ -35,6 +35,7 @@ public class GaugeBehaviorScript : MonoBehaviour {
     private bool stopGauge = false;
     private int randomNumber = 0;
     private bool delayHasBegun = false;
+    private bool delayAnimation = true;
     private States currentState = States.HOME_SCREEN;
     private int points = 0;
     private int life = 30;
@@ -124,6 +125,10 @@ public class GaugeBehaviorScript : MonoBehaviour {
     {
         delayHasBegun = true;
 
+        if (delayAnimation)
+        {
+            yield return new WaitForSeconds(1f);
+        }
         audioSource.PlayOneShot(beepSFX);
         yield return new WaitForSeconds(0.7f);
         audioSource.PlayOneShot(beepSFX);
@@ -133,6 +138,11 @@ public class GaugeBehaviorScript : MonoBehaviour {
         audioSource.PlayOneShot(startBeepSFX);
 
         currentState = States.DURING_GAME;
+    }
+
+    public void ContinueGame()
+    {
+        StartCoroutine(DelayBetweenNumbers(0.5f));
     }
 
     //Restart the game (means going on)
@@ -148,7 +158,19 @@ public class GaugeBehaviorScript : MonoBehaviour {
         numberMarker.SetActive(false);
         gaugeIsReady = true;
         delayHasBegun = false;
+        delayAnimation = true;
         currentState = States.BEFORE_GAME;
+    }
+
+    IEnumerator DelayBetweenNumbers(float delay)
+    {
+        canvasAnimator.SetBool("FadeInGame", false);
+        canvasAnimator.SetBool("KeepHUD", true);
+        yield return new WaitForSeconds(delay);
+        canvasAnimator.SetBool("FadeInGame", true);
+
+        Restart();
+        yield return null;
     }
 
     // Stop the gauge and show the number at which the gauge has been stopped.
@@ -179,6 +201,23 @@ public class GaugeBehaviorScript : MonoBehaviour {
         lifeText.text = "" + life;
     }
 
+    IEnumerator Delay(float delay)
+    {
+        canvasAnimator.SetBool("FadeInGame", false);
+        canvasAnimator.SetBool("KeepHUD", false);
+        yield return new WaitForSeconds(delay);
+        canvasAnimator.SetBool("FadeInGame", true);
+
+        SetupNewGame();
+        yield return null;
+    }
+
+    public void RestartGame()
+    {
+        delayAnimation = true;
+        StartCoroutine(Delay(0.5f));
+    }
+
     public void SetupNewGame()
     {
         restartButton.SetActive(false);
@@ -207,21 +246,16 @@ public class GaugeBehaviorScript : MonoBehaviour {
         canvasAnimator.SetBool("FadeInHome", false);
         canvasAnimator.SetBool("FadeInGame", true);
 
-        //homePanel.SetActive(false);
-        //gamePanel.SetActive(true);
+        delayAnimation = true;
 
         currentState = States.BEFORE_GAME;
     }
 
     public void GoToHome()
     {
-        SetupNewGame();
-
         canvasAnimator.SetBool("FadeInGame", false);
+        canvasAnimator.SetBool("KeepHUD", false);
         canvasAnimator.SetBool("FadeInHome", true);
-
-        //gamePanel.SetActive(false);
-        //homePanel.SetActive(true);
 
         GetBestScore();
 
